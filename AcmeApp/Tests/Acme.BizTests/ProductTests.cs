@@ -17,7 +17,8 @@ namespace Acme.BizTests
             };
             currentProduct.Vendor.CompanyName = "ABC Corp";
 
-            var expected = "Hello Saw (1): 15-inch steel blade hand saw";
+            var expected = "Hello Saw (1): 15-inch steel blade hand saw\n" +
+                "Available on ";
             var actual = currentProduct.SayHello();
 
             Assert.AreEqual(expected, actual);
@@ -41,6 +42,25 @@ namespace Acme.BizTests
             var actual = currentProduct?.Vendor?.CompanyName;
 
             Assert.AreEqual(null, actual);
+        }
+
+        [TestMethod]
+        public void ConvertMetersToInches()
+        {
+            var expected = 78.74;
+
+            var actual = 2 * Product.InchesPerMeter;
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void MinimumPriceTest()
+        {
+            var currentProduct = new Product();
+            var expected = 0.96m;
+            var actual = currentProduct.MinimumPrice;
+            Assert.AreEqual(expected, actual);
         }
     }
 }

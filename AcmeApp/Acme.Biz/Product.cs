@@ -12,9 +12,13 @@ namespace Acme.Biz
     /// </summary>
     public class Product
     {
+        public const double InchesPerMeter = 39.37;
+        public readonly decimal MinimumPrice;
+
         public Product()
         {
             Console.WriteLine("Product instance created");
+            this.MinimumPrice = .96m;
         }
         public Product(int productId, string productName, string productDescription) : this()
         {
@@ -27,7 +31,8 @@ namespace Acme.Biz
         private string _description;
         private int _productId;
         private Vendor _vendor;
-
+        private DateTime? _availability;
+        
         public int Id
         {
             get { return _productId; }
@@ -55,6 +60,11 @@ namespace Acme.Biz
             }
             set { _vendor = value; }
         }
+        public DateTime? Availability
+        {
+            get { return _availability; }
+            set { _availability = value; }
+        }
 
         public string SayHello()
         {
@@ -66,7 +76,8 @@ namespace Acme.Biz
 
             var result = LoggingService.LogAction("saying hello");
 
-            return $"Hello {Name} ({Id}): {Description}";
+            return $"Hello {Name} ({Id}): {Description}\n" +
+                $"Available on {Availability?.ToShortDateString()}";
         }
     }
 }
