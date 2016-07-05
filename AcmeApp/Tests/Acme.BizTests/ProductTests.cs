@@ -29,7 +29,8 @@ namespace Acme.BizTests
         public void SayHelloParameterizedConstructorTest()
         {
             var currentProduct = new Product(1, "Saw", "15-inch steel blade hand saw");
-            var expected = "Hello Saw (1): 15-inch steel blade hand saw";
+            var expected = "Hello Saw (1): 15-inch steel blade hand saw\n" +
+                "Available on ";
             var actual = currentProduct.SayHello();
 
             Assert.AreEqual(expected, actual);
