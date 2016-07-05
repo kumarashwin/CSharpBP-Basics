@@ -19,6 +19,7 @@ namespace Acme.Biz
         {
             Console.WriteLine("Product instance created");
             this.MinimumPrice = .96m;
+            this.Category = "Tools";
         }
         public Product(int productId, string productName, string productDescription) : this()
         {
@@ -28,26 +29,37 @@ namespace Acme.Biz
         }
 
         private string _productName;
-        private string _description;
-        private int _productId;
         private Vendor _vendor;
         private DateTime? _availability;
         
-        public int Id
-        {
-            get { return _productId; }
-            set { _productId = value; }
-        }
-        public string Description
-        {
-            get { return _description; }
-            set { _description = value; }
-        }
+        public int Id { get; set; }
+        public string Description { get; set; }
         public string Name
         {
-            get { return _productName; }
-            set { _productName = value; }
+            get
+            {
+                var formattedValue = _productName?.Trim();
+                return formattedValue;
+            }
+            set
+            {
+                if (value.Length < 3)
+                {
+                    ValidationMessage = "Product Name must be at least 3 characters";
+                }
+                else if (value.Length > 20)
+                {
+                    ValidationMessage = "Product Name cannon be more than 20 characters";
+                }
+                else
+                {
+                    _productName = value;
+                }
+            }
         }
+        internal string Category { get; set; }
+        public int SequenceNumber { get; set; } = 1;
+        public string ProductCode => $"{Category}-{SequenceNumber}";
         public Vendor Vendor
         {
             get
@@ -60,16 +72,14 @@ namespace Acme.Biz
             }
             set { _vendor = value; }
         }
-        public DateTime? Availability
-        {
-            get { return _availability; }
-            set { _availability = value; }
-        }
+        public DateTime? Availability { get; set; }
+        public string ValidationMessage { get; set; }
+        public decimal Cost { get; set; }
+        public decimal CalculateSuggestPrice(decimal markupPercernt) =>
+            this.Cost + (this.Cost * markupPercernt / 100);
 
         public string SayHello()
         {
-            //var vendor = new Vendor();
-            //vendor.SendWelcomeEmail("Message from Product");
 
             var emailService = new EmailService();
             var confirmation = emailService.SendMessage("New Product", this.Name, "sales@abc.com");
@@ -79,5 +89,7 @@ namespace Acme.Biz
             return $"Hello {Name} ({Id}): {Description}\n" +
                 $"Available on {Availability?.ToShortDateString()}";
         }
+        public override string ToString() => $"{this.Name} ({Id})";
+
     }
 }
